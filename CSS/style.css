@@ -1,1 +1,52 @@
+:root {
+    --liturgical-red: #B3261E;
+    --text-main: #1C1B1F;
+    --background-main: #FFFBFE;
+}
 
+body {
+    font-family: "Times New Roman", serif;
+    background-color: var(--background-main);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Rubricas litúrgicas */
+.rub {
+    color: var(--liturgical-red);
+    font-size: 0.85em;
+    font-style: italic;
+    font-family: "Times New Roman", serif;
+    display: block;
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+/* Títulos principais */
+h1, h2, h3 {
+    font-family: "Times New Roman", serif;
+    text-align: center;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+/* Parágrafos litúrgicos */
+p {
+    margin: 8px 0;
+}
+
+/* Container central para leitura confortável */
+.container {
+    max-width: 720px;
+    margin: auto;
+    padding: 24px;
+}
+
+/* Divisor litúrgico simples */
+.divider {
+    text-align: center;
+    margin: 24px 0;
+    color: var(--liturgical-red);
+  }
