@@ -9,7 +9,7 @@ body {
     font-family: "Times New Roman", serif;
     background-color: var(--background-main);
     color: var(--text-main);
-    margin-top: 56px;
+    margin-top: 12px;
     padding-top:56px;
     line-height: 1.6;
 }
@@ -40,8 +40,8 @@ p {
 /* Container central para leitura confortável */
 .container {
     max-width: 720px;
-    margin: 56px;
-    padding: 56px;
+    margin: 0px;
+    padding: 24px;
 }
 
 /* Divisor litúrgico simples */
