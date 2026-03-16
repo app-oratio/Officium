@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFBFE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+
+<title>Liturgia das Horas | Officium</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+<site-toolbar></site-toolbar>
+<script src="/js/toolbar.js"></script>
+
+<div class="container">
+
+<div id="content">
+<p style="text-align:center;">Carregando a Liturgia das Horas...</p>
+</div>
+
+</div>
+
+<script>
+
+const horasValidas = [
+"oficio-das-leituras",
+"laudes",
+"hora-terca",
+"hora-sexta",
+"hora-nona",
+"vesperas",
+"completas"
+];
+
+const alias = {
+"odl":"oficio-das-leituras",
+"leituras":"oficio-das-leituras",
+"terca":"hora-terca",
+"sexta":"hora-sexta",
+"nona":"hora-nona",
+"hora-media":"hora-terca",
+"media":"hora-terca"
+};
+
+function obterPathReal(){
+
+let path = sessionStorage.getItem("redirectPath");
+
+if(path){
+sessionStorage.removeItem("redirectPath");
+return path;
+}
+
+return location.pathname;
+
+}
+
+function horaCanonicaAtual(){
+
+const agora = new Date();
+const minutos = agora.getHours()*60 + agora.getMinutes();
+
+if(minutos < 240) return "completas";            // 00:00–04:00
+if(minutos < 360) return "oficio-das-leituras";  // 04:00–06:00
+if(minutos < 510) return "laudes";               // 06:00–08:30
+if(minutos < 660) return "hora-terca";           // 08:30–11:00
+if(minutos < 840) return "hora-sexta";           // 11:00–14:00
+if(minutos < 990) return "hora-nona";            // 14:00–16:30
+if(minutos < 1200) return "vesperas";            // 16:30–20:00
+
+return "completas";                               // 20:00–00:00
+
+}
+
+function obterParametros(){
+
+let path = obterPathReal();
+path = path.replace(/^\/+|\/+$/g,"");
+
+const partes = path.split("/");
+
+let hora = null;
+let data = null;
+
+if(partes[0] === "liturgia-das-horas"){
+hora = partes[1];
+data = partes[2];
+}else{
+hora = partes[0];
+data = partes[1];
+}
+
+if(alias[hora]){
+hora = alias[hora];
+}
+
+let dataObj = null;
+
+if(data && /^\d{4}-\d{2}-\d{2}$/.test(data)){
+dataObj = new Date(data + "T00:00:00");
+}
+
+if(!hora && !dataObj){
+hora = horaCanonicaAtual();
+dataObj = new Date();
+}
+
+else if(!hora && dataObj){
+hora = "oficio-das-leituras";
+}
+
+else if(!horasValidas.includes(hora)){
+hora = horaCanonicaAtual();
+}
+
+if(!dataObj){
+dataObj = new Date();
+}
+
+return {hora, dataObj};
+
+}
+
+function formatarData(data){
+
+const yyyy = data.getFullYear();
+const mm = String(data.getMonth()+1).padStart(2,"0");
+const dd = String(data.getDate()).padStart(2,"0");
+
+return {yyyy,mm,dd};
+
+}
+
+async function carregarLiturgia(){
+
+const params = obterParametros();
+const data = formatarData(params.dataObj);
+
+const caminho =
+"/content/" +
+data.yyyy + "/" +
+data.mm + "/" +
+data.dd + "/" +
+params.hora + ".html";
+
+try{
+
+const response = await fetch(caminho);
+
+if(!response.ok){
+throw new Error();
+}
+
+const html = await response.text();
+
+document.getElementById("content").innerHTML = html;
+
+}catch(e){
+
+document.getElementById("content").innerHTML =
+"<p style='text-align:center;'>Conteúdo não encontrado.</p>";
+
+}
+
+}
+
+carregarLiturgia();
+
+</script>
+
+<site-footer></site-footer>
+<script src="/js/footer.js"></script>
+
+</body>
+</html>
