@@ -22,18 +22,17 @@ this.innerHTML = `
 <img src="/icons/white-128.png" class="footer-logo">
 
 <div class="footer-title">
-<strong>Officium</strong><br>
-<span>Liturgia diária e Liturgia das Horas.</span>
+<strong>Officium</strong>
 </div>
 
 </div>
 
 <div class="footer-text">
 
-<p>© ${year} Oratio App Católico</p>
+<p>© 2024-${year} Oratio App Católico</p>
 
 <p class="footer-note">
-Os textos litúrgicos pertencem à © CNBB - Conferência Nacional dos Bispos do Brasil. Este site tem finalidade exclusivamente apostólica.
+Os textos litúrgicos pertencem à © CNBB - Conferência Nacional dos Bispos do Brasil.
 </p>
 
 </div>
