@@ -69,7 +69,10 @@ position:fixed;
 top:0;
 left:0;
 width:100%;
+
 z-index:900;
+
+box-shadow:0 2px 4px rgba(0,0,0,0.2);
 }
 
 .toolbar-left{
@@ -79,7 +82,8 @@ gap:10px;
 }
 
 .toolbar-icon{
-height:26px;
+height:28px;
+width:auto;
 }
 
 .toolbar-title{
@@ -88,9 +92,25 @@ font-weight:500;
 color:white;
 }
 
+.toolbar-right{
+display:flex;
+align-items:center;
+}
+
 .toolbar-menu{
-height:22px;
+height:24px;
+width:auto;
 cursor:pointer;
+
+padding:12px;
+box-sizing:content-box;
+}
+
+/* evita que conteúdo fique atrás da toolbar */
+
+body{
+margin:0;
+padding-top:56px;
 }
 
 /* overlay */
@@ -102,9 +122,12 @@ left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.4);
+
 opacity:0;
 visibility:hidden;
+
 transition:opacity 0.25s;
+
 z-index:999;
 }
 
@@ -113,7 +136,7 @@ opacity:1;
 visibility:visible;
 }
 
-/* drawer */
+/* menu lateral */
 
 .drawer{
 position:fixed;
@@ -138,7 +161,7 @@ z-index:1000;
 transform:translateX(0);
 }
 
-/* header */
+/* topo do menu */
 
 .drawer-header{
 background:var(--background-primary);
@@ -149,12 +172,14 @@ padding:20px;
 display:flex;
 align-items:center;
 gap:10px;
+
 text-decoration:none;
 color:white;
 }
 
 .drawer-logo{
 height:28px;
+width:auto;
 }
 
 .drawer-title{
@@ -162,7 +187,7 @@ font-size:20px;
 font-weight:500;
 }
 
-/* menu items */
+/* itens do menu */
 
 .drawer-items{
 flex:1;
@@ -172,8 +197,10 @@ flex-direction:column;
 
 .drawer-items a{
 padding:14px 20px;
+
 text-decoration:none;
 color:#333;
+
 font-size:15px;
 }
 
@@ -181,18 +208,22 @@ font-size:15px;
 background:#f2f2f2;
 }
 
-/* footer */
+/* rodapé */
 
 .drawer-footer{
 padding:16px 20px;
+
 font-size:13px;
 color:#666;
+
 border-top:1px solid #eee;
 }
 
 .drawer-footer a{
 display:block;
+
 margin-top:4px;
+
 text-decoration:none;
 color:#333;
-}
+    }
