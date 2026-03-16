@@ -3,8 +3,8 @@
   "short_name": "Officium",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2c3e50",
+  "background_color": "#014997",
+  "theme_color": "#014997",
   "orientation": "portrait",
   "icons": [
     {
