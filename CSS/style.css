@@ -106,13 +106,6 @@ padding:12px;
 box-sizing:content-box;
 }
 
-/* evita que conteúdo fique atrás da toolbar */
-
-body{
-margin:0;
-padding-top:56px;
-}
-
 /* overlay */
 
 .drawer-overlay{
