@@ -1,6 +1,6 @@
 .toolbar{
 height:56px;
-background:var(--background-primary, #014997);
+background:#014997;
 
 display:flex;
 align-items:center;
