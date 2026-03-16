@@ -40,8 +40,8 @@ p {
 /* Container central para leitura confortável */
 .container {
     max-width: 720px;
-    margin: auto;
-    padding: 24px;
+    margin: 56px;
+    padding: 56px;
 }
 
 /* Divisor litúrgico simples */
