@@ -2,7 +2,17 @@
     --liturgical-red: #B3261E;
     --text-main: #1C1B1F;
     --background-main: #FFFBFE;
-    --background-primary: #014997
+    --background-primary: #014997;
+}
+
+/* Modo escuro automático */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --liturgical-red: #F28B82;
+        --text-main: #E6E1E5;
+        --background-main: #121212;
+        --background-primary: #0A3A70;
+    }
 }
 
 body {
@@ -10,7 +20,7 @@ body {
     background-color: var(--background-main);
     color: var(--text-main);
     margin-top: 12px;
-    padding-top:56px;
+    padding-top: 56px;
     line-height: 1.6;
 }
 
@@ -49,4 +59,4 @@ p {
     text-align: center;
     margin: 24px 0;
     color: var(--liturgical-red);
-  }
+}
