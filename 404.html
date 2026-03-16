@@ -16,6 +16,71 @@
 </head>
 <body>
 
+<script>
+
+(function(){
+
+const horas = [
+"oficio-das-leituras",
+"laudes",
+"hora-terca",
+"hora-sexta",
+"hora-nona",
+"vesperas",
+"completas"
+];
+
+const alias = {
+"odl":"oficio-das-leituras",
+"leituras":"oficio-das-leituras",
+
+"terca":"hora-terca",
+"sexta":"hora-sexta",
+"nona":"hora-nona",
+
+"hora-media":"hora-terca",
+"media":"hora-terca"
+};
+
+let path = location.pathname.replace(/^\/+|\/+$/g,"");
+let partes = path.split("/");
+
+if(partes.length > 0){
+
+let primeira = partes[0];
+
+if(alias[primeira]){
+partes[0] = alias[primeira];
+}
+
+if(horas.includes(partes[0])){
+
+let novaRota = "/liturgia-das-horas/" + partes.join("/");
+
+sessionStorage.setItem("redirectPath", novaRota);
+
+location.replace("/liturgia-das-horas");
+
+return;
+
+}
+
+}
+
+if(path.startsWith("liturgia-das-horas")){
+
+sessionStorage.setItem("redirectPath","/" + path);
+
+location.replace("/liturgia-das-horas");
+
+return;
+
+}
+
+})();
+
+</script>
+
 <site-toolbar></site-toolbar>
 <script src="/js/toolbar.js"></script>
 
@@ -26,8 +91,8 @@
 <p>Ops! Esta página não foi encontrada.</p>
 
 <p>
-Siga para a nossa 
-<a href="https://officium.oratioapp.com.br/">página inicial</a> 
+Siga para a nossa
+<a href="https://officium.oratioapp.com.br/">página inicial</a>
 para acessar a liturgia de hoje.
 </p>
 
