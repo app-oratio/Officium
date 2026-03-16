@@ -6,12 +6,12 @@ this.innerHTML = `
 <div class="toolbar">
 
     <div class="toolbar-left">
-        <img src="/icons/icon-white.png" class="toolbar-icon">
+        <img src="/icons/white-128.png" class="toolbar-icon">
         <span class="toolbar-title">Officium</span>
     </div>
 
     <div class="toolbar-right">
-        <img src="/icons/nav/menu.png" class="toolbar-menu" id="menuButton">
+        <img src="/icons/nav/menu-128.png" class="toolbar-menu" id="menuButton">
     </div>
 
 </div>
@@ -22,7 +22,7 @@ this.innerHTML = `
 
     <div class="drawer-header">
         <a href="https://officium.oratioapp.com.br/">
-            <img src="/icons/icon-white.png" class="drawer-logo">
+            <img src="/icons/white-128.png" class="drawer-logo">
             <span class="drawer-title">Officium</span>
         </a>
     </div>
