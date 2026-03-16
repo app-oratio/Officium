@@ -29,7 +29,7 @@ this.innerHTML = `
 
 <div class="footer-text">
 
-<p>© 2024-${year} Oratio App Católico</p>
+<p class="footer-copyright"><strong>© 2024–${year} Oratio App Católico</strong></p>
 
 <p class="footer-note">
 Os textos litúrgicos pertencem à © CNBB - Conferência Nacional dos Bispos do Brasil.
