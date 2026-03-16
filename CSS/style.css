@@ -2,7 +2,7 @@
     --liturgical-red: #B3261E;
     --text-main: #1C1B1F;
     --background-main: #FFFBFE;
-    --background-primary: ##014997
+    --background-primary: #014997
 }
 
 body {
@@ -10,6 +10,7 @@ body {
     background-color: var(--background-main);
     color: var(--text-main);
     margin: 0;
+    padding-top:56px;
     padding: 0;
     line-height: 1.6;
 }
@@ -26,9 +27,8 @@ body {
 }
 
 /* Títulos principais */
-h1, h2, h3 {
+h1, h2 {
     font-family: "Times New Roman", serif;
-    text-align: center;
     margin-top: 1.2em;
     margin-bottom: 0.5em;
 }
@@ -64,6 +64,12 @@ padding:0 16px;
 box-sizing:border-box;
 
 color:white;
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+z-index:900;
 }
 
 .toolbar-left{
