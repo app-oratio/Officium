@@ -1,3 +1,11 @@
+if(!document.getElementById("toolbar-css")){
+const link = document.createElement("link");
+link.id = "toolbar-css";
+link.rel = "stylesheet";
+link.href = "/CSS/toolbar.css";
+document.head.appendChild(link);
+}
+
 class SiteToolbar extends HTMLElement {
 
 connectedCallback(){
