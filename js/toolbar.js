@@ -2,7 +2,7 @@ if(!document.getElementById("toolbar-css")){
 const link = document.createElement("link");
 link.id = "toolbar-css";
 link.rel = "stylesheet";
-link.href = "/CSS/toolbar.css";
+link.href = "/css/toolbar.css";
 document.head.appendChild(link);
 }
 
@@ -46,7 +46,7 @@ this.innerHTML = `
         <a href="/completas">Completas</a>
         <a href="/calendario">Calendário Litúrgico</a>
         <a href="/ordinario-da-missa">Ordinário da Missa</a>
-        <a href="https://oratioapp.com.br/ajude-nos">Ajude-nos</a>
+        <a href="https://oratioapp.com.br/ajude">Ajude-nos</a>
 
     </div>
 
