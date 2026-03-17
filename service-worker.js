@@ -24,26 +24,27 @@ const DAILY_FILES = [
 ];
 
 self.addEventListener("install", function(event) {
-
     self.skipWaiting();
-
     event.waitUntil(initialSetup());
-
 });
 
 self.addEventListener("activate", function(event) {
-
     event.waitUntil(
-
         (async function() {
 
             await self.clients.claim();
-            await updateContent();
+
+            // força atualização das abas abertas
+            const clients = await self.clients.matchAll();
+            for (const client of clients) {
+                client.navigate(client.url);
+            }
 
         })()
-
     );
 
+    // roda em background (não bloqueia activate)
+    updateContent();
 });
 
 async function initialSetup() {
@@ -51,15 +52,14 @@ async function initialSetup() {
     const cache = await caches.open(APP_CACHE);
 
     for (const file of CORE_FILES) {
-
         try {
             await cache.add(file);
-        } catch (e) {}
-
+        } catch (e) {
+            console.warn("Erro ao cachear core:", file);
+        }
     }
 
     await updateContent();
-
 }
 
 async function updateContent() {
@@ -70,12 +70,22 @@ async function updateContent() {
 
     try {
 
-        const response = await fetch(VERSION_URL, { cache: "no-store" });
+        const response = await fetch(VERSION_URL + "?t=" + Date.now(), {
+            cache: "no-store"
+        });
+
         const text = await response.text();
 
-        remoteVersion = parseInt(text.trim());
+        const parsed = parseInt(text.trim());
+        if (isNaN(parsed)) {
+            console.warn("Versão inválida:", text);
+            return;
+        }
+
+        remoteVersion = parsed;
 
     } catch (e) {
+        console.error("Erro ao buscar versão:", e);
         return;
     }
 
@@ -84,10 +94,11 @@ async function updateContent() {
     const versionResponse = await cache.match(VERSION_KEY);
 
     if (versionResponse) {
-
         const text = await versionResponse.text();
-        localVersion = parseInt(text);
-
+        const parsed = parseInt(text);
+        if (!isNaN(parsed)) {
+            localVersion = parsed;
+        }
     }
 
     if (remoteVersion <= localVersion) {
@@ -95,6 +106,9 @@ async function updateContent() {
     }
 
     const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const promises = [];
 
     for (let i = -10; i <= 10; i++) {
 
@@ -111,24 +125,29 @@ async function updateContent() {
 
             const url = base + file;
 
-            try {
+            const p = fetch(url, { cache: "no-store" })
+                .then(function(response) {
+                    if (response.ok) {
+                        return cache.put(url, response.clone());
+                    } else {
+                        console.warn("Resposta não OK:", url);
+                    }
+                })
+                .catch(function(e) {
+                    console.error("Erro ao baixar:", url);
+                });
 
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    await cache.put(url, response.clone());
-                }
-
-            } catch (e) {}
-
+            promises.push(p);
         }
-
     }
+
+    await Promise.all(promises);
 
     await cache.put(VERSION_KEY, new Response(String(remoteVersion)));
 
     await cleanOldContent(cache);
 
+    console.log("Conteúdo atualizado para versão:", remoteVersion);
 }
 
 async function cleanOldContent(cache) {
@@ -136,6 +155,7 @@ async function cleanOldContent(cache) {
     const requests = await cache.keys();
 
     const today = new Date();
+    today.setHours(0,0,0,0);
 
     const minDate = new Date(today);
     minDate.setDate(today.getDate() - 10);
@@ -162,15 +182,12 @@ async function cleanOldContent(cache) {
         const day = parseInt(parts[4]);
 
         const fileDate = new Date(year, month, day);
+        fileDate.setHours(0,0,0,0);
 
         if (fileDate < minDate || fileDate > maxDate) {
-
             await cache.delete(request);
-
         }
-
     }
-
 }
 
 self.addEventListener("fetch", function(event) {
@@ -182,8 +199,10 @@ self.addEventListener("fetch", function(event) {
     if (dateParam) {
 
         const requestedDate = new Date(dateParam);
+        requestedDate.setHours(0,0,0,0);
 
         const today = new Date();
+        today.setHours(0,0,0,0);
 
         const minDate = new Date(today);
         minDate.setDate(today.getDate() - 10);
@@ -192,16 +211,12 @@ self.addEventListener("fetch", function(event) {
         maxDate.setDate(today.getDate() + 10);
 
         if (requestedDate < minDate || requestedDate > maxDate) {
-
             event.respondWith(fetch(event.request));
             return;
-
         }
-
     }
 
     event.respondWith(handleRequest(event.request));
-
 });
 
 async function handleRequest(request) {
@@ -209,18 +224,19 @@ async function handleRequest(request) {
     const appCache = await caches.open(APP_CACHE);
     const contentCache = await caches.open(CONTENT_CACHE);
 
-    let response = await contentCache.match(request);
+    let response = await contentCache.match(request, { ignoreSearch: true });
 
     if (response) {
         return response;
     }
 
-    response = await appCache.match(request);
+    response = await appCache.match(request, { ignoreSearch: true });
 
     if (response) {
         return response;
     }
 
-    return fetch(request);
-
+    return fetch(request).catch(async function() {
+        return await appCache.match("/index.html");
+    });
 }
