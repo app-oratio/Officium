@@ -1661,3 +1661,31 @@
 </p>
 
       </section>
+
+
+  <site-footer></site-footer>
+<script src="/js/footer.js"></script>
+
+<script>
+function abrirRito(id, botaoSelecionado) {
+    const botoes = document.querySelectorAll(".menu-rito button");
+
+    // Remove destaque de todos
+    botoes.forEach(function (btn) {
+        btn.classList.remove("ativo");
+    });
+
+    // Adiciona destaque no botão clicado
+    botaoSelecionado.classList.add("ativo");
+
+    // Scroll suave até a seção
+    const secao = document.getElementById(id);
+    secao.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+</script>
+
+</body>
+</html>
