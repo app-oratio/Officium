@@ -23,30 +23,32 @@
 <script src="/js/toolbar.js"></script>
     
 
-<h4 style="position: fixed; top: 0; left: 0; right: 0; margin:0; padding: 10px; background: inherit; z-index: 1000; text-align: center; background-color: white">
-    <span id="btn-iniciais" onclick="abrirRito('iniciais', this)" style="cursor: pointer;">
-    Ritos Iniciais
-</span>
-    |
-    <span id="btn-palavra" onclick="abrirRito('palavra', this)" style="color: red; cursor: pointer;">
-        <u>Liturgia da Palavra</u>
-    </span>
-    |
-    <span id="btn-eucaristica" onclick="abrirRito('eucaristica', this)" style="color: red; cursor: pointer;">
-        <u>Liturgia Eucarística</u>
-    </span>
-    |
-    <span id="btn-comunhao" onclick="abrirRito('comunhao', this)" style="color: red; cursor: pointer;">
-        <u>Rito da Comunhão</u>
-    </span>
-    |
-    <span id="btn-finais" onclick="abrirRito('finais', this)" style="color: red; cursor: pointer;">
-        <u>Ritos Finais</u>
-    </span>
-</h4>
+<nav class="menu-rito" style="margin: 0; padding: 10px; text-align: center; background-color: var(--background-main);">
+
+    <button class="ativo" onclick="abrirRito('iniciais', this)">
+        Ritos Iniciais
+    </button>
+
+    <button onclick="abrirRito('palavra', this)">
+        Liturgia da Palavra
+    </button>
+
+    <button onclick="abrirRito('eucaristica', this)">
+        Liturgia Eucarística
+    </button>
+
+    <button onclick="abrirRito('comunhao', this)">
+        Rito da Comunhão
+    </button>
+
+    <button onclick="abrirRito('finais', this)">
+        Ritos Finais
+    </button>
+
+</nav>
+    
 <br><br>
-<div style="margin-top: 70px;">
-    <div id="iniciais">
+<div id="iniciais">
         <h3 style="color: red">RITOS INICIAIS</h3>
 
 <p><span class="rub">Reunido o povo, o sacerdote dirige-se com os ministros ao altar, enquanto se executa o canto de entrada.<br/>
@@ -1393,29 +1395,26 @@ E a bênção de Deus todo-poderoso,<br>Pai e Filho <span style="color: red">✠
       os que recebem a ajuda de tantos intercessores.
       Por Cristo, nosso Senhor.</p>
     </div>
-</div>
 
 <site-footer></site-footer>
 <script src="/js/footer.js"></script>
 
 <script>
-    function abrirRito(id, spanSelecionado) {
-        const ritos = ["iniciais", "palavra", "eucaristica", "comunhao", "finais"];
-        const spans = document.querySelectorAll("h4 span");
+function abrirRito(id, botaoSelecionado) {
+    const ritos = ["iniciais", "palavra", "eucaristica", "comunhao", "finais"];
+    const botoes = document.querySelectorAll(".menu-rito button");
 
-        ritos.forEach(function (rito) {
-            document.getElementById(rito).style.display = "none";
-        });
+    ritos.forEach(function (rito) {
+        document.getElementById(rito).style.display = "none";
+    });
 
-        spans.forEach(function (span) {
-            span.style.color = "red";
-            span.innerHTML = "<u>" + span.textContent + "</u>";
-        });
+    botoes.forEach(function (btn) {
+        btn.classList.remove("ativo");
+    });
 
-        document.getElementById(id).style.display = "block";
-        spanSelecionado.style.color = "";
-        spanSelecionado.textContent = spanSelecionado.textContent;
-    }
+    document.getElementById(id).style.display = "block";
+    botaoSelecionado.classList.add("ativo");
+}
 </script>
 
 </body>
