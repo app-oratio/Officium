@@ -20,16 +20,15 @@
 <script src="/js/toolbar.js"></script>
 
 <div class="container">
-
 <div id="content">
 <p style="text-align:center;">Carregando a Liturgia das Horas...</p>
 </div>
-
 </div>
 
 <script>
 
 const horasValidas = [
+"invitatorio",
 "oficio-das-leituras",
 "laudes",
 "hora-terca",
@@ -45,9 +44,11 @@ const alias = {
 "terca":"hora-terca",
 "sexta":"hora-sexta",
 "nona":"hora-nona",
-"hora-media":"hora-terca",
+"hora_media":"hora-terca",
 "media":"hora-terca"
 };
+
+const regexData = /^\d{4}-\d{2}-\d{2}$/;
 
 function obterPathReal(){
 
@@ -67,15 +68,15 @@ function horaCanonicaAtual(){
 const agora = new Date();
 const minutos = agora.getHours()*60 + agora.getMinutes();
 
-if(minutos < 240) return "completas";            // 00:00–04:00
-if(minutos < 360) return "oficio-das-leituras";  // 04:00–06:00
-if(minutos < 510) return "laudes";               // 06:00–08:30
-if(minutos < 660) return "hora-terca";           // 08:30–11:00
-if(minutos < 840) return "hora-sexta";           // 11:00–14:00
-if(minutos < 990) return "hora-nona";            // 14:00–16:30
-if(minutos < 1200) return "vesperas";            // 16:30–20:00
+if(minutos < 240) return "completas";
+if(minutos < 360) return "oficio-das-leituras";
+if(minutos < 510) return "laudes";
+if(minutos < 660) return "hora-terca";
+if(minutos < 840) return "hora-sexta";
+if(minutos < 990) return "hora-nona";
+if(minutos < 1200) return "vesperas";
 
-return "completas";                               // 20:00–00:00
+return "completas";
 
 }
 
@@ -103,20 +104,19 @@ hora = alias[hora];
 
 let dataObj = null;
 
-if(data && /^\d{4}-\d{2}-\d{2}$/.test(data)){
-dataObj = new Date(data + "T00:00:00");
+if(data && regexData.test(data)){
+const p = data.split("-");
+dataObj = new Date(p[0], p[1]-1, p[2]);
 }
 
 if(!hora && !dataObj){
 hora = horaCanonicaAtual();
 dataObj = new Date();
 }
-
 else if(!hora && dataObj){
-hora = "oficio-das-leituras";
+hora = horaCanonicaAtual();
 }
-
-else if(!horasValidas.includes(hora)){
+else if(hora && !horasValidas.includes(hora)){
 hora = horaCanonicaAtual();
 }
 
@@ -138,25 +138,161 @@ return {yyyy,mm,dd};
 
 }
 
+// ===============================
+// COMPLETAS
+// ===============================
+
+async function montarCaminhoCompletas(data){
+
+const infoPath =
+"/content/" +
+data.yyyy + "/" +
+data.mm + "/" +
+data.dd + "/info.json";
+
+try{
+
+const response = await fetch(infoPath);
+if(!response.ok) throw new Error();
+
+const json = await response.json();
+
+const tempo = json.tempoLiturgico;
+const diaSemana = json.diaSemana;
+const tipoMemoria = json.tipoMemoria;
+const primeirasVesp = json.primeirasVesp;
+
+// contentTime
+let contentTime;
+
+if(tempo === "Pa"){
+contentTime = "Pa";
+}else if(tempo === "Qu"){
+contentTime = "Qu";
+}else{
+contentTime = "TL";
+}
+
+// contentDay
+let contentDay;
+
+if(diaSemana === "Sab" || diaSemana === "Dom"){
+contentDay = diaSemana;
+}else{
+
+if(tipoMemoria === "S"){
+contentDay = "ii-solenidade";
+}else{
+
+if(primeirasVesp === "T"){
+contentDay = "i-solenidade";
+}else{
+contentDay = diaSemana;
+}
+
+}
+
+}
+
+return "/content/completas/" + contentTime + "/" + contentDay + ".html";
+
+}catch(e){
+return null;
+}
+
+}
+
+// ===============================
+// INVITATORIO
+// ===============================
+
+async function montarInvitatorio(data){
+
+const basePath = "/content/invitatorio.html";
+
+const diaPath =
+"/content/" +
+data.yyyy + "/" +
+data.mm + "/" +
+data.dd + "/invitatorio.html";
+
+try{
+
+const baseRes = await fetch(basePath);
+if(!baseRes.ok) throw new Error();
+
+let baseHtml = await baseRes.text();
+
+let substituicao = "";
+
+try{
+const diaRes = await fetch(diaPath);
+if(diaRes.ok){
+substituicao = await diaRes.text();
+}
+}catch(e){}
+
+baseHtml = baseHtml.replace(/<ANTÍFONA>/g, substituicao);
+
+return baseHtml;
+
+}catch(e){
+return null;
+}
+
+}
+
+// ===============================
+// CARREGAMENTO PRINCIPAL
+// ===============================
+
 async function carregarLiturgia(){
 
 const params = obterParametros();
 const data = formatarData(params.dataObj);
 
-const caminho =
+try{
+
+// INVITATORIO
+if(params.hora === "invitatorio"){
+
+const html = await montarInvitatorio(data);
+
+if(!html) throw new Error();
+
+document.getElementById("content").innerHTML = html;
+return;
+
+}
+
+// COMPLETAS
+let caminho;
+
+if(params.hora === "completas"){
+
+caminho = await montarCaminhoCompletas(data);
+
+if(!caminho){
+caminho =
+"/content/" +
+data.yyyy + "/" +
+data.mm + "/" +
+data.dd + "/completas.html";
+}
+
+}else{
+
+caminho =
 "/content/" +
 data.yyyy + "/" +
 data.mm + "/" +
 data.dd + "/" +
 params.hora + ".html";
 
-try{
+}
 
 const response = await fetch(caminho);
-
-if(!response.ok){
-throw new Error();
-}
+if(!response.ok) throw new Error();
 
 const html = await response.text();
 
@@ -165,7 +301,7 @@ document.getElementById("content").innerHTML = html;
 }catch(e){
 
 document.getElementById("content").innerHTML =
-"<p style='text-align:center;'>Conteúdo não encontrado.</p>";
+"<p style='text-align:center;'>Liturgia não disponível para esta data ou horário.</p>";
 
 }
 
