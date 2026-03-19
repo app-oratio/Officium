@@ -1,0 +1,175 @@
+:root{
+    /* Cores litúrgicas (pensadas pra contraste) */
+    --liturgical-color-red: #b71c1c;
+    --liturgical-color-purple: #4a148c;
+    --liturgical-color-white: #f5f5f5;
+    --liturgical-color-green: #1b5e20;
+    --liturgical-color-pink: #ad1457;
+    --liturgical-color-gold: #d4af37;
+    --color-container: var(--color-primary);
+
+  
+}
+
+/* Layout principal */
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+/* Containers */
+
+.box-month{
+    border: 2px solid var(--color-container);
+    padding: 10px;
+}
+
+.box-month h2 {
+    margin: 0;
+}
+
+.box-month span {
+    color: var(--liturgical-red); /* mantido como você pediu */
+    font-style: italic;
+}
+
+/* Dias */
+
+.box-dom,
+.box-day {
+    border: 2px solid var(--color-container);
+    border-top: none;
+
+    display: flex;
+}
+
+.box-dom {
+    margin-top: 5px;
+}
+
+/* Box tempos Litúrgicos */
+
+.box-purple {
+    background: var(--liturgical-color-purple);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+}
+
+.box-purple * {
+    color: #fff !important;
+}
+
+.box-green {
+    background: var(--liturgical-color-green);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+}
+
+.box-green * {
+    color: #fff !important;
+}
+
+.box-white {
+    background: var(--liturgical-color-white);
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+}
+
+.box-white * {
+    color: #000 !important;
+}
+
+.box-gold {
+    background: var(--liturgical-color-gold);
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+}
+
+.box-gold * {
+    color: #000 !important;
+}
+
+/* Colunas */
+
+.col-dia, 
+.col-semana, 
+.col-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 2px solid var(--color-container);
+}
+
+/* Barra lateral litúrgica */
+.col-color{
+    flex: 0 0 8px;
+}
+
+/* Colunas fixas */
+.col-dia {
+    flex: 0 0 50px;
+}
+
+.col-semana {
+    flex: 0 0 60px;
+}
+
+/* Texto */
+.col-texto {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 6px;
+}
+
+/* Tipografia */
+
+.title-1{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.title-2{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.title-3{
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.type-memoria{
+    color: var(--liturgical-red);
+}
+
+/* Links */
+
+.link-dia {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-dia:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+/* Responsivo */
+
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr 1fr;
+    }
+  }
