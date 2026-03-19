@@ -10,6 +10,8 @@ class SiteToolbar extends HTMLElement {
 
 connectedCallback(){  
 
+const year = new Date().getFullYear();
+
 this.innerHTML = `  
 <div class="toolbar">  
 
@@ -46,7 +48,7 @@ this.innerHTML = `
         <a href="/nona">Hora Nona</a>  
         <a href="/vesperas">Vésperas</a>  
         <a href="/completas">Completas</a>  
-        <a href="/calendario">Calendário Litúrgico</a>  
+        <a href="/calendario/${year}">Calendário Litúrgico</a>  
         <a href="/ordinario-da-missa">Ordinário da Missa</a>  
         <a href="https://oratioapp.com.br/ajude">Ajude-nos</a>  
 
