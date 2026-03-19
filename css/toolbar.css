@@ -105,6 +105,15 @@ p {
     gap: 10px;
 }
 
+    .toolbar-left a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+    color: white;
+    }
+
 .toolbar-icon {
     height: 28px;
     width: auto;
