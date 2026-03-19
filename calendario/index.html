@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script>
+    (function () {
+      var ano = new Date().getFullYear();
+      var destino = ano + ".html";
+
+      // Verifica se o arquivo existe antes de redirecionar
+      fetch(destino, { method: "HEAD" })
+        .then(function (res) {
+          if (res.ok) {
+            window.location.replace(destino);
+          } else {
+            window.location.replace("2026.html"); // fallback
+          }
+        })
+        .catch(function () {
+          window.location.replace("2026.html"); // fallback em erro
+        });
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Calendário Litúrgico</h1>
+  <p>Redirecionando para o ano atual...</p>
+
+  <p>Se não for redirecionado automaticamente, <a id="linkManual" href="2026.html">clique aqui</a>.</p>
+
+  <script>
+    // Atualiza também o link manual
+    var ano = new Date().getFullYear();
+    document.getElementById("linkManual").href = ano + ".html";
+  </script>
+
+</body>
+</html>
