@@ -6,7 +6,7 @@
     --liturgical-color-green: #1b5e20;
     --liturgical-color-pink: #ad1457;
     --liturgical-color-gold: #d4af37;
-    --color-container: var(--color-primary);
+    --color-container: var(--text-main);
 
   
 }
@@ -17,6 +17,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    padding:10px;
 }
 
 /* Containers */
@@ -24,6 +25,8 @@
 .box-month{
     border: 2px solid var(--color-container);
     padding: 10px;
+    align-items: center;
+    text-align: center;
 }
 
 .box-month h2 {
@@ -136,17 +139,17 @@
 /* Tipografia */
 
 .title-1{
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 .title-2{
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 .title-3{
-    font-size: 12px;
+    font-size: 16px;
     font-weight: normal;
 }
 
