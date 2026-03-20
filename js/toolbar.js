@@ -50,6 +50,7 @@ this.innerHTML = `
         <a href="/completas">Completas</a>  
         <a href="/calendario/${year}">Calendário Litúrgico</a>  
         <a href="/ordinario-da-missa">Ordinário da Missa</a>  
+        <a href="/sobre">Sobre o Officium</a>  
         <a href="https://oratioapp.com.br/ajude">Ajude-nos</a>  
 
     </div>  
