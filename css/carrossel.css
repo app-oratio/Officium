@@ -1,0 +1,125 @@
+.carousel {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Slides */
+.slides {
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+    touch-action: pan-y;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 6px;
+}
+
+/* Card */
+.card {
+    background: var(--background-main);
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Link */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Imagem (proporção fixa 1800x1280) */
+.bg-img {
+    width: 100%;
+    aspect-ratio: 1800 / 1280;
+
+    border-radius: 12px;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+
+    transition: transform 0.3s ease;
+}
+
+.card-link:hover .bg-img {
+    transform: scale(1.03);
+}
+
+/* Conteúdo */
+.content {
+    padding: 10px 4px;
+}
+
+/* Tag */
+.tag {
+    display: inline-block;
+    background: var(--background-primary);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+/* Título */
+.content h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--text-main);
+}
+
+/* Texto */
+.content p {
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--text-main);
+    opacity: 0.8;
+}
+
+/* Botões */
+.nav {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.prev {
+    left: -10px;
+}
+
+.next {
+    right: -10px;
+}
+
+/* Bolinhas */
+.dots {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 4px;
+    background: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dots .active {
+    background: var(--text-main);
+  }
