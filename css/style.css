@@ -3,6 +3,7 @@
     --text-main: #1C1B1F;
     --background-main: #FFFBFE;
     --background-primary: #014997;
+    --background-secondary: #F3EDF7;
 }
 
 /* Modo escuro automático */
@@ -12,6 +13,7 @@
         --text-main: #E6E1E5;
         --background-main: #121212;
         --background-primary: #0A3A70;
+        --background-secondary: #1E1E1E;
     }
 }
 
