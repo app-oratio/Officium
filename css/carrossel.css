@@ -3,6 +3,8 @@
     margin: 0 auto;
     position: relative;
     overflow: hidden;
+    margin-top: 48px;
+    margin-bottom: 48px;
 }
 
 /* Slides */
