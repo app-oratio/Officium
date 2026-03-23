@@ -82,6 +82,9 @@ async function loadDailyContent() {
         }
 
         document.getElementById("content").innerHTML = content;
+        if (typeof initCarousel === "function") {
+            initCarousel();
+        }
 
     } catch (e) {
 
