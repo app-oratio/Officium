@@ -5,19 +5,31 @@ document.addEventListener("DOMContentLoaded", function () {
   const slides = document.querySelector('.slides');
   const slideItems = document.querySelectorAll('.slide');
   const dots = document.querySelectorAll('.dots span');
+  const carousel = document.querySelector('.carousel');
 
   const total = slideItems.length;
+
+  if (!slides || total === 0) return;
 
   let interval;
 
   /* BOTÕES */
-  document.querySelector('.next').onclick = function () {
-    nextSlide();
-  };
+  const nextBtn = document.querySelector('.next');
+  const prevBtn = document.querySelector('.prev');
 
-  document.querySelector('.prev').onclick = function () {
-    prevSlide();
-  };
+  if (nextBtn) {
+    nextBtn.onclick = function () {
+      nextSlide();
+      restartAutoplay();
+    };
+  }
+
+  if (prevBtn) {
+    prevBtn.onclick = function () {
+      prevSlide();
+      restartAutoplay();
+    };
+  }
 
   /* FUNÇÕES */
   function nextSlide() {
@@ -38,11 +50,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function update() {
-    slides.style.transform = "translateX(-" + (index * 100) + "%)";
+    slides.style.transform = `translateX(-${index * 100}%)`;
     updateDots();
   }
 
   function updateDots() {
+    if (!dots.length) return;
+
     dots.forEach(function(dot, i) {
       dot.classList.remove('active');
       if (i === index) {
@@ -61,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* AUTOPLAY */
   function startAutoplay() {
+    stopAutoplay();
     interval = setInterval(function () {
       nextSlide();
     }, 4000);
@@ -71,16 +86,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function restartAutoplay() {
-    stopAutoplay();
     startAutoplay();
   }
 
   startAutoplay();
 
-  const carousel = document.querySelector('.carousel');
-
-  carousel.addEventListener('mouseenter', stopAutoplay);
-  carousel.addEventListener('mouseleave', startAutoplay);
+  if (carousel) {
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+  }
 
   /* SWIPE */
   let startX = 0;
@@ -96,14 +110,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   slides.addEventListener('touchend', function () {
     let diff = startX - endX;
+    let threshold = window.innerWidth * 0.1;
 
-    if (diff > 50) {
+    if (diff > threshold) {
       nextSlide();
-    } else if (diff < -50) {
+    } else if (diff < -threshold) {
       prevSlide();
     }
 
     restartAutoplay();
   });
+
+  /* INICIALIZA */
+  update();
 
 });
