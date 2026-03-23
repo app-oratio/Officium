@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function initCarousel() {
 
   let index = 0;
 
@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let interval;
 
-  /* BOTÕES */
   const nextBtn = document.querySelector('.next');
   const prevBtn = document.querySelector('.prev');
 
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-  /* FUNÇÕES */
   function nextSlide() {
     index++;
     if (index >= total) index = 0;
@@ -65,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* CLIQUE NAS BOLINHAS */
   dots.forEach(function(dot, i) {
     dot.addEventListener('click', function () {
       goToSlide(i);
@@ -73,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* AUTOPLAY */
   function startAutoplay() {
     stopAutoplay();
     interval = setInterval(function () {
@@ -96,7 +92,6 @@ document.addEventListener("DOMContentLoaded", function () {
     carousel.addEventListener('mouseleave', startAutoplay);
   }
 
-  /* SWIPE */
   let startX = 0;
   let endX = 0;
 
@@ -121,7 +116,5 @@ document.addEventListener("DOMContentLoaded", function () {
     restartAutoplay();
   });
 
-  /* INICIALIZA */
   update();
-
-});
+    }
