@@ -1,33 +1,34 @@
 function initCarousel() {
-
   let index = 0;
 
   const slides = document.querySelector('.slides');
   const slideItems = document.querySelectorAll('.slide');
   const dots = document.querySelectorAll('.dots span');
   const carousel = document.querySelector('.carousel');
-
-  const total = slideItems.length;
-
-  if (!slides || total === 0) return;
-
-  let interval;
-
   const nextBtn = document.querySelector('.next');
   const prevBtn = document.querySelector('.prev');
 
-  if (nextBtn) {
-    nextBtn.onclick = function () {
-      nextSlide();
-      restartAutoplay();
-    };
+  if (!slides || !slideItems.length) return;
+
+  const total = slideItems.length;
+
+  let interval = null;
+
+  let startX = 0;
+  let currentX = 0;
+  let startTime = 0;
+  let isDragging = false;
+
+  function update() {
+    const offset = -index * slides.offsetWidth;
+    slides.style.transform = 'translateX(' + offset + 'px)';
+    updateDots();
   }
 
-  if (prevBtn) {
-    prevBtn.onclick = function () {
-      prevSlide();
-      restartAutoplay();
-    };
+  function updateDots() {
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('active', i === index);
+    });
   }
 
   function nextSlide() {
@@ -47,28 +48,12 @@ function initCarousel() {
     update();
   }
 
-  function update() {
-    slides.style.transform = `translateX(-${index * 100}%)`;
-    updateDots();
+  function stopAutoplay() {
+    if (interval) {
+      clearInterval(interval);
+      interval = null;
+    }
   }
-
-  function updateDots() {
-    if (!dots.length) return;
-
-    dots.forEach(function(dot, i) {
-      dot.classList.remove('active');
-      if (i === index) {
-        dot.classList.add('active');
-      }
-    });
-  }
-
-  dots.forEach(function(dot, i) {
-    dot.addEventListener('click', function () {
-      goToSlide(i);
-      restartAutoplay();
-    });
-  });
 
   function startAutoplay() {
     stopAutoplay();
@@ -77,44 +62,84 @@ function initCarousel() {
     }, 4000);
   }
 
-  function stopAutoplay() {
-    clearInterval(interval);
-  }
-
   function restartAutoplay() {
     startAutoplay();
   }
 
-  startAutoplay();
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      nextSlide();
+      restartAutoplay();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      prevSlide();
+      restartAutoplay();
+    });
+  }
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener('click', function () {
+      goToSlide(i);
+      restartAutoplay();
+    });
+  });
 
   if (carousel) {
     carousel.addEventListener('mouseenter', stopAutoplay);
     carousel.addEventListener('mouseleave', startAutoplay);
   }
 
-  let startX = 0;
-  let endX = 0;
+  // Swipe com drag + velocity
 
   slides.addEventListener('touchstart', function (e) {
     startX = e.touches[0].clientX;
+    currentX = startX;
+    startTime = Date.now();
+    isDragging = true;
+
+    slides.style.transition = 'none';
+    stopAutoplay();
   });
 
   slides.addEventListener('touchmove', function (e) {
-    endX = e.touches[0].clientX;
+    if (!isDragging) return;
+
+    currentX = e.touches[0].clientX;
+    const diff = currentX - startX;
+
+    const offset = -index * slides.offsetWidth + diff;
+    slides.style.transform = 'translateX(' + offset + 'px)';
   });
 
   slides.addEventListener('touchend', function () {
-    let diff = startX - endX;
-    let threshold = window.innerWidth * 0.1;
+    if (!isDragging) return;
 
-    if (diff > threshold) {
+    isDragging = false;
+
+    const diff = currentX - startX;
+    const time = Date.now() - startTime;
+
+    const velocity = Math.abs(diff / time);
+
+    const threshold = slides.offsetWidth * 0.2;
+    const velocityThreshold = 0.5;
+
+    slides.style.transition = 'transform 0.4s ease';
+
+    if (diff < -threshold || (velocity > velocityThreshold && diff < 0)) {
       nextSlide();
-    } else if (diff < -threshold) {
+    } else if (diff > threshold || (velocity > velocityThreshold && diff > 0)) {
       prevSlide();
+    } else {
+      update();
     }
 
     restartAutoplay();
   });
 
   update();
-    }
+  startAutoplay();
+}
