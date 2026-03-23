@@ -22,22 +22,19 @@
 <body>
     
 <site-toolbar></site-toolbar>
-
 <script src="/js/toolbar.js"></script>
     
 <div class="container">
-
-<div id="content">
-<p style="text-align:center;">Carregando liturgia do dia...</p>
-</div>
-
+  <div id="content">
+    <p style="text-align:center;">Carregando liturgia do dia...</p>
+  </div>
 </div>
 
 <site-footer></site-footer>
 <script src="/js/footer.js"></script>
 
 <script src="/js/carrossel.js"></script>
-    
+
 <script>
 
 async function loadContentForDate(date) {
@@ -84,9 +81,9 @@ async function loadDailyContent() {
         }
 
         document.getElementById("content").innerHTML = content;
-        if (typeof initCarousel === "function") {
-            initCarousel();
-        }
+
+        // ✅ AGORA A FUNÇÃO EXISTE E O HTML TAMBÉM
+        initCarousel();
 
     } catch (e) {
 
@@ -117,6 +114,5 @@ if ("serviceWorker" in navigator) {
 
 </script>
     
-
 </body>
 </html>
