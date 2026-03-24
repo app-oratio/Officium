@@ -10,9 +10,20 @@
 <meta name="theme-color" content="#FFFBFE" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 
+<!-- SEO básico -->
+<title>Liturgia do dia | Officium</title>
+<meta name="description" content="Liturgia diária completa: leituras, salmos e Evangelho do dia segundo a Igreja Católica.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Liturgia do dia | Officium">
+<meta property="og:description" content="Acompanhe a liturgia diária da Igreja Católica.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seusite.com">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://seusite.com/">
+
 <link rel="manifest" href="manifest.json">
-    
-<title>Officium</title>
 
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/carrossel.css">
@@ -43,20 +54,21 @@ async function loadContentForDate(date) {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
 
-    const url =
-        "content/" +
-        year + "/" +
-        month + "/" +
-        day +
-        "/index.html";
+    const url = `content/${year}/${month}/${day}/index.html`;
 
-    const response = await fetch(url);
+    try {
 
-    if (!response.ok) {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return await response.text();
+
+    } catch (e) {
         return null;
     }
-
-    return await response.text();
 }
 
 async function loadDailyContent() {
@@ -64,16 +76,21 @@ async function loadDailyContent() {
     try {
 
         const localDate = new Date();
+        let content = null;
+        let usedDate = null;
 
-        let content = await loadContentForDate(localDate);
+        // tenta até 7 dias anteriores
+        for (let i = 0; i < 7; i++) {
 
-        if (!content) {
+            const testDate = new Date(localDate);
+            testDate.setDate(localDate.getDate() - i);
 
-            const yesterday = new Date(localDate);
-            yesterday.setDate(localDate.getDate() - 1);
+            content = await loadContentForDate(testDate);
 
-            content = await loadContentForDate(yesterday);
-
+            if (content) {
+                usedDate = testDate;
+                break;
+            }
         }
 
         if (!content) {
@@ -82,8 +99,26 @@ async function loadDailyContent() {
 
         document.getElementById("content").innerHTML = content;
 
-        // ✅ AGORA A FUNÇÃO EXISTE E O HTML TAMBÉM
-        initCarousel();
+        // Atualiza título dinamicamente
+        const year = usedDate.getFullYear();
+        const month = String(usedDate.getMonth() + 1).padStart(2, "0");
+        const day = String(usedDate.getDate()).padStart(2, "0");
+
+        document.title = `Liturgia do dia ${day}/${month}/${year} | Officium`;
+
+        // Atualiza description
+        const desc = document.querySelector('meta[name="description"]');
+        if (desc) {
+            desc.setAttribute(
+                "content",
+                `Liturgia do dia ${day}/${month}/${year}: leituras, salmo e Evangelho.`
+            );
+        }
+
+        // Inicializa carrossel com segurança
+        if (typeof initCarousel === "function") {
+            initCarousel();
+        }
 
     } catch (e) {
 
@@ -91,7 +126,6 @@ async function loadDailyContent() {
             "<p style='text-align:center;'>Conteúdo litúrgico indisponível.</p>";
 
     }
-
 }
 
 loadDailyContent();
@@ -102,7 +136,7 @@ loadDailyContent();
 
 if ("serviceWorker" in navigator) {
 
-    navigator.serviceWorker.register("service-worker.js")
+    navigator.serviceWorker.register("service-worker.js", { scope: "./" })
     .then(function() {
         console.log("Service Worker registrado");
     })
@@ -115,4 +149,4 @@ if ("serviceWorker" in navigator) {
 </script>
     
 </body>
-</html>
+    </html>
