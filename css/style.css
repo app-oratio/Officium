@@ -107,3 +107,32 @@ p {
 .menu-rito button:hover {
     opacity: 0.8;
 }
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    margin-bottom: 16px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border: 0;
+    border-radius: 12px;
+}
+
+.meta {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.creditos {
+    margin-top: 24px;
+    font-size: 14px;
+    opacity: 0.7;
+}
